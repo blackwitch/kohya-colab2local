@@ -1,0 +1,7 @@
+[general]
+resolution = 512
+cuda_home = "C://Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.8"
+lora_name = "your_lora_name"
+model_url = ""
+activation_tag = "your_project_name"
+remove_tags = ""

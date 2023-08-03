@@ -1,0 +1,14 @@
+toml
+safetensors
+xformers
+fiftyone 
+ftfy
+tensorflow==2.12.0 
+huggingface-hub==0.12.0 
+accelerate==0.15.0 
+transformers==4.26.0 
+diffusers[torch]==0.10.2 
+einops==0.6.0 
+safetensors==0.2.6 
+torchvision 
+albumentations
