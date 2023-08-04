@@ -184,27 +184,33 @@ if not os.path.exists(kohya):
     subprocess.run(['git', 'reset', '--hard', '5050971ac687dca70ba0486a583d283e8ae324e2'])
     os.chdir(root_dir)
 
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-subprocess.run(["python", f'{kohya}/finetune/tag_images_by_wd14_tagger.py', 
-                images_folder, "--repo_id=SmilingWolf/wd-v1-4-swinv2-tagger-v2", 
-                f"--model_dir={root_dir}", f"--thresh={tag_threshold}", 
-                "--batch_size=8", "--caption_extension=.txt", "--force_download"], shell=True)
+if "tags" in method:
+  os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+  subprocess.run(["python", f'{kohya}/finetune/tag_images_by_wd14_tagger.py', 
+                  images_folder, "--repo_id=SmilingWolf/wd-v1-4-swinv2-tagger-v2", 
+                  f"--model_dir={root_dir}", f"--thresh={tag_threshold}", 
+                  "--batch_size=8", "--caption_extension=.txt", "--force_download"], shell=True)
 
-print("removing underscores and blacklist...")
-blacklisted_tags = [t.strip() for t in blacklist_tags.split(",")]
-from collections import Counter
-top_tags = Counter()
-for txt in [f for f in os.listdir(images_folder) if f.lower().endswith(".txt")]:
-    with open(os.path.join(images_folder, txt), 'r') as f:
-        tags = [t.strip() for t in f.read().split(",")]
-        tags = [t.replace("_", " ") if len(t) > 3 else t for t in tags]
-        tags = [t for t in tags if t not in blacklisted_tags]
-    top_tags.update(tags)
-    with open(os.path.join(images_folder, txt), 'w') as f:
-        f.write(", ".join(tags))
+  print("removing underscores and blacklist...")
+  blacklisted_tags = [t.strip() for t in blacklist_tags.split(",")]
+  from collections import Counter
+  top_tags = Counter()
+  for txt in [f for f in os.listdir(images_folder) if f.lower().endswith(".txt")]:
+      with open(os.path.join(images_folder, txt), 'r') as f:
+          tags = [t.strip() for t in f.read().split(",")]
+          tags = [t.replace("_", " ") if len(t) > 3 else t for t in tags]
+          tags = [t for t in tags if t not in blacklisted_tags]
+      top_tags.update(tags)
+      with open(os.path.join(images_folder, txt), 'w') as f:
+          f.write(", ".join(tags))
 
-print(f"📊 Tagging complete. Here are the top 50 tags in your dataset:")
-print("\n".join(f"{k} ({v})" for k, v in top_tags.most_common(50)))
+  print(f"📊 Tagging complete. Here are the top 50 tags in your dataset:")
+  print("\n".join(f"{k} ({v})" for k, v in top_tags.most_common(50)))
+else: # Photos
+  subprocess.run(["python", f'{kohya}/finetune/make_captions.py', 
+                  images_folder, "--beam_search", 
+                  "--max_data_loader_n_workers=2", f"--min_length={caption_min}", f"--max_length={caption_max}",
+                  "--batch_size=8", "--caption_extension=.txt", "--force_download"], shell=True)  
 
 #@markdown ### 5️⃣ Curate your tags
 #@markdown Modify your dataset's tags. You can run this cell multiple times with different parameters. <p>

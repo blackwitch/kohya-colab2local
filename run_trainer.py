@@ -63,6 +63,13 @@ if optional_custom_training_model_url:
     model_url = optional_custom_training_model_url
 else:
     model_url = "https://huggingface.co/hollowstrawberry/stable-diffusion-guide/resolve/main/models/animefull-final-pruned-fp16.safetensors"
+'''
+elif "AnyLora" in training_model:
+  model_url = "https://huggingface.co/Lykon/AnyLoRA/resolve/main/AnyLoRA_noVae_fp16-pruned.ckpt"
+else:
+  model_url = "https://huggingface.co/hollowstrawberry/stable-diffusion-guide/resolve/main/models/sd-v1-5-pruned-noema-fp16.safetensors"
+'''
+
 
 # ### ▶️ Processing
 resolution = main_config.get("general").get("resolution") #min:512, max:1024, step:256
