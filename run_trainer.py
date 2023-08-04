@@ -185,10 +185,16 @@ def clone_repo():
     subprocess.run(['git', 'reset', '--hard', COMMIT])
     urllib.request.urlretrieve("https://raw.githubusercontent.com/hollowstrawberry/kohya-colab/main/requirements.txt", "requirements.txt") # urllib.request.urlretrieve은 파일을 다운로드 하는데 사용
 
-    subprocess.run(["copy", ".\\bitsandbytes_windows\\*.dll", "..\\..\\.venv\\Lib\\site-packages\\bitsandbytes\\"], shell=True)
-    subprocess.run(["copy", ".\\bitsandbytes_windows\\cextension.py", "..\\..\\.venv\\Lib\\site-packages\\bitsandbytes\\cextension.py"], shell=True)
-    subprocess.run(["copy", ".\\bitsandbytes_windows\\main.py", "..\\..\\.venv\\Lib\\site-packages\\bitsandbytes\\cuda_setup\\main.py"], shell=True)
+    # .venv 폴더가 있는지 확인
+    venv_folder = os.path.join(current_directory, ".venv")
+    if os.path.exists(venv_folder) and os.path.isdir(venv_folder):
+        target_folder = "..\\..\\.venv\\Lib\\site-packages\\bitsandbytes\\"
+    else:
+        target_folder = sys.prefix + "\\Lib\\site-packages\\bitsandbytes\\"
 
+    subprocess.run(["copy", ".\\bitsandbytes_windows\\*.dll", target_folder], shell=True)
+    subprocess.run(["copy", ".\\bitsandbytes_windows\\cextension.py", f"{target_folder}cextension.py"], shell=True)
+    subprocess.run(["copy", ".\\bitsandbytes_windows\\main.py", f"{target_folder}cuda_setup\\main.py"], shell=True)
 
 def install_dependencies():
     clone_repo()
