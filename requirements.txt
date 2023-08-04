@@ -3,6 +3,7 @@ safetensors
 xformers
 fiftyone 
 ftfy
+torch==2.0.1
 tensorflow==2.12.0 
 huggingface-hub==0.12.0 
 accelerate==0.15.0 
@@ -12,3 +13,4 @@ einops==0.6.0
 safetensors==0.2.6 
 torchvision 
 albumentations
+
